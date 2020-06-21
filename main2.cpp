@@ -5,6 +5,7 @@
 #include "opencv2/opencv.hpp"
 #include <iostream>
 #include <vector>
+   
 
 using namespace cv;
 using namespace std;
@@ -20,6 +21,8 @@ int main(int argc, char* argv[])
 		return -1;
 
 	Mat gray;
+	time_t timer;
+	time_t timerant;
 
 	//-- IMAGENS PARA ACHAR --//
 	Mat A = imread("./A.jpg", IMREAD_GRAYSCALE);
@@ -38,11 +41,13 @@ int main(int argc, char* argv[])
 	int fontThickness = 2;
 	int cropSize = 100; //escala da figura pra comparar
 	int erroMax = cropSize*cropSize*255; // erro maximo quando comparando imgs (absdiff)
+	char str[200];
 
 	for(;;){
-		
+			
 		Mat frame, otsu, gray;
 		capture >> frame;
+
 		cvtColor(frame, gray, COLOR_BGR2GRAY);
 		medianBlur(gray, gray, 5);
 		medianBlur(gray, gray, 5);		
@@ -84,12 +89,12 @@ int main(int argc, char* argv[])
 				minRect[i] = minAreaRect( Mat(conts[i]) );
 				
 				float angle = minRect[i].angle;
-        		Size rect_size = minRect[i].size;
-        		if (minRect[i].angle < -45.) {
-            		angle += 90.0;
-            		swap(rect_size.width, rect_size.height);
-        		} 
-        		M = getRotationMatrix2D(minRect[i].center, angle, 1.0);
+				Size rect_size = minRect[i].size;
+				if (minRect[i].angle < -45.) {
+					angle += 90.0;
+					swap(rect_size.width, rect_size.height);
+				} 
+				M = getRotationMatrix2D(minRect[i].center, angle, 1.0);
 				
 				warpAffine(gray, rotated, M, gray.size(), INTER_CUBIC);
 				//warpAffine(frame, rotated, M, frame.size(), INTER_CUBIC);
@@ -110,7 +115,7 @@ int main(int argc, char* argv[])
 				double min = 999999999999;
 				int minShape = 0;
 				double s;
-				char str[200];
+				
 
 				absdiff(cropped, A, diff);
 				s = cv::sum( diff )[0];
@@ -222,8 +227,10 @@ int main(int argc, char* argv[])
 				}
 
 			}
-				
+			
 		}
+		sprintf(str,"Rauan Pires - 14103318");
+        putText(frame, str, Point(10,40), FONT_HERSHEY_PLAIN,3, Scalar(0,255,255),3);
 
 		imshow("frame",frame);
 		

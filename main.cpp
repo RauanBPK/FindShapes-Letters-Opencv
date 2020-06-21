@@ -65,6 +65,7 @@ int main(int argc, char* argv[])
 
 		vector<Vec3f> circles;
 		vector<int> centros;
+    char str[200];
  		HoughCircles(otsu, circles, HOUGH_GRADIENT,1 , 50 , 120 , otTh); // 19
   
   		for( size_t i = 0; i < circles.size(); i++ )
@@ -81,7 +82,7 @@ int main(int argc, char* argv[])
 
   		}
   		if(circles.size() == 3){
-      		char str[200];
+      		
       		float dist,a,b,c;
 			
       		line(frame,Point(centros[0],centros[1]),Point(centros[2],centros[3]),Scalar(255,0,0), 4, LINE_AA);
@@ -107,13 +108,14 @@ int main(int argc, char* argv[])
       		float Area = sqrt(p*((p-a)*(p-b)*(p-c)));
 
       		sprintf(str,"Area: %.2f", Area);
-      		putText(frame, str, Point(10,40), FONT_HERSHEY_PLAIN,3, Scalar(0,255,100),3);
-
-
+      		putText(frame, str, Point(10,80), FONT_HERSHEY_PLAIN,3, Scalar(80,255,100),3);
+  
        	}
       	centros.clear();
-
-  		printf("%d\n", circles.size());
+        sprintf(str,"Rauan Pires - 14103318");
+        putText(frame, str, Point(10,40), FONT_HERSHEY_PLAIN,3, Scalar(0,255,255),3); 
+  
+  	printf("%d\n", circles.size());
 		imshow("frame",frame);
 		if(waitKey(30) >= 0) break;
 	}
